@@ -1,0 +1,135 @@
+\begin{thebibliography}{18}
+\providecommand{\natexlab}[1]{#1}
+\providecommand{\url}[1]{\texttt{#1}}
+\expandafter\ifx\csname urlstyle\endcsname\relax
+  \providecommand{\doi}[1]{doi: #1}\else
+  \providecommand{\doi}{doi: \begingroup \urlstyle{rm}\Url}\fi
+
+\bibitem[Lee et~al.(2020)Lee, Hwangbo, Wellhausen, Koltun, and
+  Hutter]{lee2020learning}
+J.~Lee, J.~Hwangbo, L.~Wellhausen, V.~Koltun, and M.~Hutter.
+\newblock Learning quadrupedal locomotion over challenging terrain.
+\newblock \emph{Science Robotics}, 5\penalty0 (47), 2020.
+
+\bibitem[Miki et~al.(2022)Miki, Lee, Hwangbo, Wellhausen, Koltun, and
+  Hutter]{miki2022learning}
+T.~Miki, J.~Lee, J.~Hwangbo, L.~Wellhausen, V.~Koltun, and M.~Hutter.
+\newblock Learning robust perceptive locomotion for quadrupedal robots in the
+  wild.
+\newblock \emph{Science Robotics}, 7\penalty0 (62), 2022.
+
+\bibitem[Agarwal et~al.(2022)Agarwal, Kumar, Malik, and
+  Pathak]{agarwal2022legged}
+A.~Agarwal, A.~Kumar, J.~Malik, and D.~Pathak.
+\newblock Legged locomotion in challenging terrains using egocentric vision.
+\newblock In \emph{Conference on Robot Learning (CoRL)}, 2022.
+
+\bibitem[Lee et~al.(2024)Lee, Bjelonic, Reske, Wellhausen, Miki, and
+  Hutter]{lee2024wheeled}
+J.~Lee, M.~Bjelonic, A.~Reske, L.~Wellhausen, T.~Miki, and M.~Hutter.
+\newblock Learning robust autonomous navigation and locomotion for
+  wheeled-legged robots.
+\newblock \emph{Science Robotics}, 9\penalty0 (89), 2024.
+
+\bibitem[Kumar et~al.(2021)Kumar, Fu, Pathak, and Malik]{kumar2021rma}
+A.~Kumar, Z.~Fu, D.~Pathak, and J.~Malik.
+\newblock Rma: Rapid motor adaptation for legged robots.
+\newblock In \emph{Robotics: Science and Systems (RSS)}, 2021.
+
+\bibitem[Nahrendra et~al.(2023)Nahrendra, Yu, and Myung]{nahrendra2023dreamwaq}
+I.~M.~A. Nahrendra, B.~Yu, and H.~Myung.
+\newblock Dreamwaq: Learning robust quadrupedal locomotion with implicit
+  terrain imagination via deep reinforcement learning.
+\newblock In \emph{IEEE International Conference on Robotics and Automation
+  (ICRA)}, 2023.
+
+\bibitem[Ji et~al.(2024)Ji, Margolis, and Agrawal]{ji2024hybrid}
+A.~Ji, G.~B. Margolis, and P.~Agrawal.
+\newblock Hybrid internal model: Learning agile legged locomotion with
+  simulated robot response.
+\newblock In \emph{International Conference on Learning Representations
+  (ICLR)}, 2024.
+
+\bibitem[Margolis et~al.(2024)Margolis, Yang, Paigwar, Chen, and
+  Agrawal]{margolis2024rapid}
+G.~B. Margolis, G.~Yang, K.~Paigwar, T.~Chen, and P.~Agrawal.
+\newblock Rapid locomotion via reinforcement learning.
+\newblock \emph{The International Journal of Robotics Research}, 2024.
+
+\bibitem[Bjelonic et~al.(2019)Bjelonic, Bellicoso, de~Viragh, Sako, Tresoldi,
+  Tombari, and Hutter]{bjelonic2019keep}
+M.~Bjelonic, C.~D. Bellicoso, Y.~de~Viragh, D.~Sako, F.~D. Tresoldi,
+  F.~Tombari, and M.~Hutter.
+\newblock Keep rollin' --- whole-body motion control and planning for wheeled
+  quadrupedal robots.
+\newblock \emph{IEEE Robotics and Automation Letters}, 4\penalty0 (2):\penalty0
+  2116--2123, 2019.
+
+\bibitem[Bjelonic et~al.(2021)Bjelonic, Grandia, Harley, Galliard, Zimmermann,
+  and Hutter]{bjelonic2021whole}
+M.~Bjelonic, R.~Grandia, O.~Harley, C.~Galliard, S.~Zimmermann, and M.~Hutter.
+\newblock Whole-body mpc and online gait sequence generation for wheeled-legged
+  robots.
+\newblock In \emph{IEEE/RSJ International Conference on Intelligent Robots and
+  Systems (IROS)}, 2021.
+
+\bibitem[Klemm et~al.(2019)Klemm, Morra, Salzmann, Tschopp, Bodie, Gulich,
+  Zufferey, Brambilla, Peyron, Kolvenbach, et~al.]{klemm2019ascento}
+V.~Klemm, A.~Morra, C.~Salzmann, F.~Tschopp, K.~Bodie, L.~Gulich, N.~Zufferey,
+  D.~Brambilla, S.~Peyron, H.~Kolvenbach, et~al.
+\newblock Ascento: A two-wheeled jumping robot.
+\newblock In \emph{IEEE International Conference on Robotics and Automation
+  (ICRA)}, 2019.
+
+\bibitem[Rudin et~al.(2024)Rudin, Schmid, Kolvenbach, and
+  Hutter]{rudin2024blind}
+N.~Rudin, L.~Schmid, H.~Kolvenbach, and M.~Hutter.
+\newblock Reinforcement learning for blind stair climbing with legged and
+  wheeled-legged robots.
+\newblock In \emph{IEEE International Conference on Robotics and Automation
+  (ICRA)}, 2024.
+
+\bibitem[Rudin et~al.(2022)Rudin, Hoeller, Reist, and
+  Hutter]{rudin2022learning}
+N.~Rudin, D.~Hoeller, P.~Reist, and M.~Hutter.
+\newblock Learning to walk in minutes using massively parallel deep
+  reinforcement learning.
+\newblock In \emph{Conference on Robot Learning (CoRL)}, 2022.
+
+\bibitem[Margolis and Agrawal(2022)]{margolis2022walk}
+G.~B. Margolis and P.~Agrawal.
+\newblock Walk these ways: Tuning robot control for generalization with
+  multiplicity of behavior.
+\newblock In \emph{Conference on Robot Learning (CoRL)}, 2022.
+
+\bibitem[Haddadin et~al.(2017)Haddadin, De~Luca, and
+  Albu-Sch{\"a}ffer]{haddadin2017robot}
+S.~Haddadin, A.~De~Luca, and A.~Albu-Sch{\"a}ffer.
+\newblock Robot collisions: A survey on detection, isolation, and
+  identification.
+\newblock \emph{IEEE Transactions on Robotics}, 33\penalty0 (6):\penalty0
+  1292--1312, 2017.
+
+\bibitem[Higuera et~al.(2022)Higuera, Dhami, Homchaudhuri, Sherrod, Bhatti,
+  Bhatt, Chatila, Mahadevan, and Kaur]{higuera2022traversability}
+J.~C.~G. Higuera, A.~Dhami, B.~Homchaudhuri, N.~Sherrod, S.~Bhatti, M.~Bhatt,
+  R.~Chatila, S.~Mahadevan, and P.~Kaur.
+\newblock Traversability analysis with vision and terrain probing for safe
+  legged robot navigation.
+\newblock In \emph{Frontiers in Robotics and AI}, 2022.
+
+\bibitem[Schulman et~al.(2017)Schulman, Wolski, Dhariwal, Radford, and
+  Klimov]{schulman2017proximal}
+J.~Schulman, F.~Wolski, P.~Dhariwal, A.~Radford, and O.~Klimov.
+\newblock Proximal policy optimization algorithms.
+\newblock \emph{arXiv preprint arXiv:1707.06347}, 2017.
+
+\bibitem[Mittal et~al.(2023)Mittal, Yu, Yu, Liu, Rudin, Hoeller, Yuan, Singh,
+  Guo, Mazhar, et~al.]{mittal2023orbit}
+M.~Mittal, C.~Yu, Q.~Yu, J.~Liu, N.~Rudin, D.~Hoeller, J.~L. Yuan, R.~Singh,
+  Y.~Guo, H.~Mazhar, et~al.
+\newblock Orbit: A unified simulation framework for interactive robot learning
+  environments.
+\newblock In \emph{IEEE Robotics and Automation Letters}, 2023.
+
+\end{thebibliography}

@@ -1,0 +1,23 @@
+% AWM Abstract — CoRL 2026
+% Last updated: 2026-04-02
+
+\begin{abstract}
+Morphologically adaptive robots promise the versatility of legged locomotion and the
+efficiency of wheeled movement, but typically require depth cameras and complex algorithms
+to determine when to reconfigure. We argue that robot design choices directly determine
+algorithmic complexity — a robot built with learnability in mind can reduce a hard
+perception-and-control problem to a simple learned policy. We present AWM (All-Wheel-Morph),
+a low-cost open-source wheeled-legged robot where each wheel extends into a leg, designed
+to make morphological adaptation learnable: actuators with built-in torque observability,
+a continuous morphology range, and sim-to-real transferable dynamics. Leveraging torque
+feedback natively available from AWM's actuators, we propose \textbf{Active Morphological
+Probing} --- an LSTM policy that physically senses terrain by extending legs and reading
+contact torque, adapting morphology without any depth camera. Without exteroception, our
+policy matches camera-equipped baselines in terrain traversal while a fixed-morphology
+wheels-only policy plateaus at half the curriculum difficulty regardless of training
+duration, confirming that adaptive morphology is the key enabler. Our approach requires
+no teacher-student distillation, no privileged training information, and deploys as a
+single network. We fully open-source AWM --- including hardware design, bill of materials,
+simulation assets, training code, and trained policies --- so that anyone can build, train,
+and deploy a morphologically adaptive robot with off-the-shelf components under \$2,500.
+\end{abstract}

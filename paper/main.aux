@@ -1,0 +1,102 @@
+\relax 
+\providecommand\hyper@newdestlabel[2]{}
+\bibstyle{corlabbrvnat}
+\providecommand\HyperFirstAtBeginDocument{\AtBeginDocument}
+\HyperFirstAtBeginDocument{\ifx\hyper@anchor\@undefined
+\global\let\oldcontentsline\contentsline
+\gdef\contentsline#1#2#3#4{\oldcontentsline{#1}{#2}{#3}}
+\global\let\oldnewlabel\newlabel
+\gdef\newlabel#1#2{\newlabelxx{#1}#2}
+\gdef\newlabelxx#1#2#3#4#5#6{\oldnewlabel{#1}{{#2}{#3}}}
+\AtEndDocument{\ifx\hyper@anchor\@undefined
+\let\contentsline\oldcontentsline
+\let\newlabel\oldnewlabel
+\fi}
+\fi}
+\global\let\hyper@last\relax 
+\gdef\HyperFirstAtBeginDocument#1{#1}
+\providecommand\HyField@AuxAddToFields[1]{}
+\providecommand\HyField@AuxAddToCoFields[2]{}
+\citation{lee2020learning,miki2022learning}
+\@writefile{toc}{\contentsline {section}{\numberline {1}Introduction}{1}{section.1}\protected@file@percent }
+\citation{miki2022learning}
+\citation{agarwal2022legged}
+\citation{lee2024wheeled}
+\citation{lee2020learning}
+\citation{kumar2021rma}
+\citation{nahrendra2023dreamwaq}
+\citation{ji2024hybrid}
+\citation{margolis2024rapid}
+\citation{bjelonic2019keep,bjelonic2021whole,klemm2019ascento}
+\citation{rudin2024blind}
+\@writefile{toc}{\contentsline {section}{\numberline {2}Related Work}{2}{section.2}\protected@file@percent }
+\@writefile{toc}{\contentsline {paragraph}{Terrain-aware locomotion with exteroception.}{2}{section*.1}\protected@file@percent }
+\@writefile{toc}{\contentsline {paragraph}{Proprioceptive and blind locomotion.}{2}{section*.2}\protected@file@percent }
+\@writefile{toc}{\contentsline {paragraph}{Morphologically adaptive and wheeled-legged robots.}{2}{section*.3}\protected@file@percent }
+\citation{rudin2022learning}
+\citation{margolis2022walk}
+\citation{haddadin2017robot}
+\citation{higuera2022traversability}
+\@writefile{lof}{\contentsline {figure}{\numberline {1}{\ignorespaces AWM (All-Wheel-Morph). Each of the four wheels integrates a leg actuator whose rotation extends the wheel hub into ground contact. At left: legs retracted (wheel mode). At right: legs extended (probing/stair mode). All hardware is open-sourced under \$2{,}500.}}{3}{figure.1}\protected@file@percent }
+\newlabel{fig:robot}{{1}{3}{AWM (All-Wheel-Morph). Each of the four wheels integrates a leg actuator whose rotation extends the wheel hub into ground contact. At left: legs retracted (wheel mode). At right: legs extended (probing/stair mode). All hardware is open-sourced under \$2{,}500}{figure.1}{}}
+\@writefile{toc}{\contentsline {paragraph}{Curriculum learning for locomotion RL.}{3}{section*.4}\protected@file@percent }
+\@writefile{toc}{\contentsline {paragraph}{Joint torques and contact sensing.}{3}{section*.5}\protected@file@percent }
+\@writefile{toc}{\contentsline {section}{\numberline {3}The AWM Platform}{3}{section.3}\protected@file@percent }
+\newlabel{sec:platform}{{3}{3}{The AWM Platform}{section.3}{}}
+\@writefile{toc}{\contentsline {subsection}{\numberline {3.1}Mechanical Design}{3}{subsection.3.1}\protected@file@percent }
+\@writefile{toc}{\contentsline {subsection}{\numberline {3.2}Torque Sensing via Actuation Mode}{3}{subsection.3.2}\protected@file@percent }
+\newlabel{sec:torque_sensing}{{3.2}{3}{Torque Sensing via Actuation Mode}{subsection.3.2}{}}
+\newlabel{eq:torque}{{1}{4}{Torque Sensing via Actuation Mode}{equation.3.1}{}}
+\@writefile{toc}{\contentsline {subsection}{\numberline {3.3}Open-Source Release}{4}{subsection.3.3}\protected@file@percent }
+\@writefile{toc}{\contentsline {section}{\numberline {4}Active Morphological Probing}{4}{section.4}\protected@file@percent }
+\newlabel{sec:method}{{4}{4}{Active Morphological Probing}{section.4}{}}
+\@writefile{toc}{\contentsline {subsection}{\numberline {4.1}Problem Formulation}{4}{subsection.4.1}\protected@file@percent }
+\@writefile{toc}{\contentsline {subsection}{\numberline {4.2}Observation Space}{4}{subsection.4.2}\protected@file@percent }
+\@writefile{lot}{\contentsline {table}{\numberline {1}{\ignorespaces AMP observation space. Leg torques (bold) replace the 35-dimensional terrain\_scan from the camera baseline, reducing observation size by 31 dimensions while enabling terrain sensing through physical contact.}}{4}{table.1}\protected@file@percent }
+\newlabel{tab:obs}{{1}{4}{AMP observation space. Leg torques (bold) replace the 35-dimensional terrain\_scan from the camera baseline, reducing observation size by 31 dimensions while enabling terrain sensing through physical contact}{table.1}{}}
+\@writefile{toc}{\contentsline {paragraph}{Torque sensing via PD loading.}{4}{section*.6}\protected@file@percent }
+\newlabel{eq:pd}{{2}{4}{Torque sensing via PD loading}{equation.4.2}{}}
+\citation{schulman2017proximal}
+\citation{mittal2023orbit}
+\@writefile{toc}{\contentsline {subsection}{\numberline {4.3}Policy Architecture}{5}{subsection.4.3}\protected@file@percent }
+\@writefile{toc}{\contentsline {subsection}{\numberline {4.4}Training}{5}{subsection.4.4}\protected@file@percent }
+\newlabel{sec:training}{{4.4}{5}{Training}{subsection.4.4}{}}
+\@writefile{toc}{\contentsline {section}{\numberline {5}Experiments}{5}{section.5}\protected@file@percent }
+\newlabel{sec:experiments}{{5}{5}{Experiments}{section.5}{}}
+\@writefile{toc}{\contentsline {subsection}{\numberline {5.1}Simulation Comparison}{5}{subsection.5.1}\protected@file@percent }
+\newlabel{sec:sim_comparison}{{5.1}{5}{Simulation Comparison}{subsection.5.1}{}}
+\@writefile{lot}{\contentsline {table}{\numberline {2}{\ignorespaces Terrain curriculum level at convergence (mean $\pm $ std across seeds, last 10 evaluations per run). AMP matches the GRU camera baseline while using 31 fewer observation dimensions and no depth sensor.}}{5}{table.2}\protected@file@percent }
+\newlabel{tab:sim_results}{{2}{5}{Terrain curriculum level at convergence (mean $\pm $ std across seeds, last 10 evaluations per run). AMP matches the GRU camera baseline while using 31 fewer observation dimensions and no depth sensor}{table.2}{}}
+\@writefile{toc}{\contentsline {subsection}{\numberline {5.2}Ablation: What Does Torque Sensing Contribute?}{6}{subsection.5.2}\protected@file@percent }
+\newlabel{sec:ablation}{{5.2}{6}{Ablation: What Does Torque Sensing Contribute?}{subsection.5.2}{}}
+\@writefile{lot}{\contentsline {table}{\numberline {3}{\ignorespaces Ablation isolating the contribution of torque sensing. Fixed-legs condition has legs extended but not torque-sensing: it cannot adapt morphology and receives no torque input.}}{6}{table.3}\protected@file@percent }
+\newlabel{tab:ablation}{{3}{6}{Ablation isolating the contribution of torque sensing. Fixed-legs condition has legs extended but not torque-sensing: it cannot adapt morphology and receives no torque input}{table.3}{}}
+\@writefile{toc}{\contentsline {subsection}{\numberline {5.3}Torque Signatures as Terrain Encoding}{6}{subsection.5.3}\protected@file@percent }
+\newlabel{sec:torque_signatures}{{5.3}{6}{Torque Signatures as Terrain Encoding}{subsection.5.3}{}}
+\@writefile{toc}{\contentsline {subsection}{\numberline {5.4}Sim-to-Real Transfer}{6}{subsection.5.4}\protected@file@percent }
+\newlabel{sec:sim2real}{{5.4}{6}{Sim-to-Real Transfer}{subsection.5.4}{}}
+\@writefile{lot}{\contentsline {table}{\numberline {4}{\ignorespaces Sim-to-real transfer. Both policies use identical hardware (ZED Mini for IMU); terrain\_scan additionally uses ZED Mini depth. The clean hardware match isolates the sensing modality as the only difference between conditions.}}{6}{table.4}\protected@file@percent }
+\newlabel{tab:sim2real}{{4}{6}{Sim-to-real transfer. Both policies use identical hardware (ZED Mini for IMU); terrain\_scan additionally uses ZED Mini depth. The clean hardware match isolates the sensing modality as the only difference between conditions}{table.4}{}}
+\@writefile{toc}{\contentsline {subsection}{\numberline {5.5}Failure Analysis}{6}{subsection.5.5}\protected@file@percent }
+\newlabel{sec:failure}{{5.5}{6}{Failure Analysis}{subsection.5.5}{}}
+\@writefile{toc}{\contentsline {section}{\numberline {6}Conclusion}{6}{section.6}\protected@file@percent }
+\bibdata{references}
+\bibcite{lee2020learning}{{1}{2020}{{Lee et~al.}}{{Lee, Hwangbo, Wellhausen, Koltun, and Hutter}}}
+\bibcite{miki2022learning}{{2}{2022}{{Miki et~al.}}{{Miki, Lee, Hwangbo, Wellhausen, Koltun, and Hutter}}}
+\bibcite{agarwal2022legged}{{3}{2022}{{Agarwal et~al.}}{{Agarwal, Kumar, Malik, and Pathak}}}
+\bibcite{lee2024wheeled}{{4}{2024}{{Lee et~al.}}{{Lee, Bjelonic, Reske, Wellhausen, Miki, and Hutter}}}
+\bibcite{kumar2021rma}{{5}{2021}{{Kumar et~al.}}{{Kumar, Fu, Pathak, and Malik}}}
+\bibcite{nahrendra2023dreamwaq}{{6}{2023}{{Nahrendra et~al.}}{{Nahrendra, Yu, and Myung}}}
+\bibcite{ji2024hybrid}{{7}{2024}{{Ji et~al.}}{{Ji, Margolis, and Agrawal}}}
+\bibcite{margolis2024rapid}{{8}{2024}{{Margolis et~al.}}{{Margolis, Yang, Paigwar, Chen, and Agrawal}}}
+\bibcite{bjelonic2019keep}{{9}{2019}{{Bjelonic et~al.}}{{Bjelonic, Bellicoso, de~Viragh, Sako, Tresoldi, Tombari, and Hutter}}}
+\bibcite{bjelonic2021whole}{{10}{2021}{{Bjelonic et~al.}}{{Bjelonic, Grandia, Harley, Galliard, Zimmermann, and Hutter}}}
+\bibcite{klemm2019ascento}{{11}{2019}{{Klemm et~al.}}{{Klemm, Morra, Salzmann, Tschopp, Bodie, Gulich, Zufferey, Brambilla, Peyron, Kolvenbach, et~al.}}}
+\bibcite{rudin2024blind}{{12}{2024}{{Rudin et~al.}}{{Rudin, Schmid, Kolvenbach, and Hutter}}}
+\bibcite{rudin2022learning}{{13}{2022}{{Rudin et~al.}}{{Rudin, Hoeller, Reist, and Hutter}}}
+\bibcite{margolis2022walk}{{14}{2022}{{Margolis and Agrawal}}{{}}}
+\bibcite{haddadin2017robot}{{15}{2017}{{Haddadin et~al.}}{{Haddadin, De~Luca, and Albu-Sch{\"a}ffer}}}
+\bibcite{higuera2022traversability}{{16}{2022}{{Higuera et~al.}}{{Higuera, Dhami, Homchaudhuri, Sherrod, Bhatti, Bhatt, Chatila, Mahadevan, and Kaur}}}
+\bibcite{schulman2017proximal}{{17}{2017}{{Schulman et~al.}}{{Schulman, Wolski, Dhariwal, Radford, and Klimov}}}
+\bibcite{mittal2023orbit}{{18}{2023}{{Mittal et~al.}}{{Mittal, Yu, Yu, Liu, Rudin, Hoeller, Yuan, Singh, Guo, Mazhar, et~al.}}}
+\gdef \@abspage@last{9}

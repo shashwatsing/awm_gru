@@ -1,0 +1,173 @@
+{
+  "motor_id": 1,
+  "timestamp": "2026-04-19T17:00:19.970686",
+  "trials": [
+    {
+      "trial": 1,
+      "weight_kg": 0.5,
+      "arm_m": 0.04,
+      "theoretical_nm": 0.1962,
+      "mean_current_mA": -17.033333333333335,
+      "std_current_mA": 3.4423425486465202,
+      "torque_constant": -11.518590998043052
+    },
+    {
+      "trial": 2,
+      "weight_kg": 0.5,
+      "arm_m": 0.04,
+      "theoretical_nm": 0.1962,
+      "mean_current_mA": -16.155555555555555,
+      "std_current_mA": 3.5472950919166286,
+      "torque_constant": -12.144429160935353
+    },
+    {
+      "trial": 3,
+      "weight_kg": 0.5,
+      "arm_m": 0.04,
+      "theoretical_nm": 0.1962,
+      "mean_current_mA": -16.227777777777778,
+      "std_current_mA": 3.8559557909457927,
+      "torque_constant": -12.09038000684697
+    },
+    {
+      "trial": 4,
+      "weight_kg": 1.0,
+      "arm_m": 0.04,
+      "theoretical_nm": 0.3924,
+      "mean_current_mA": -41.622222222222234,
+      "std_current_mA": 4.7504743103020255,
+      "torque_constant": -9.42765616657768
+    },
+    {
+      "trial": 5,
+      "weight_kg": 1.0,
+      "arm_m": 0.04,
+      "theoretical_nm": 0.3924,
+      "mean_current_mA": -41.12777777777779,
+      "std_current_mA": 4.518425924977212,
+      "torque_constant": -9.540996893151425
+    },
+    {
+      "trial": 6,
+      "weight_kg": 1.0,
+      "arm_m": 0.04,
+      "theoretical_nm": 0.3924,
+      "mean_current_mA": -40.90000000000001,
+      "std_current_mA": 4.996081798102723,
+      "torque_constant": -9.594132029339852
+    },
+    {
+      "trial": 7,
+      "weight_kg": 0.5,
+      "arm_m": 0.08,
+      "theoretical_nm": 0.3924,
+      "mean_current_mA": -37.81666666666668,
+      "std_current_mA": 3.420688689593239,
+      "torque_constant": -10.376377258704272
+    },
+    {
+      "trial": 8,
+      "weight_kg": 0.5,
+      "arm_m": 0.08,
+      "theoretical_nm": 0.3924,
+      "mean_current_mA": -37.061111111111124,
+      "std_current_mA": 3.935576886823425,
+      "torque_constant": -10.587917853395291
+    },
+    {
+      "trial": 9,
+      "weight_kg": 0.5,
+      "arm_m": 0.08,
+      "theoretical_nm": 0.3924,
+      "mean_current_mA": -37.44444444444446,
+      "std_current_mA": 4.098098776292113,
+      "torque_constant": -10.479525222551928
+    },
+    {
+      "trial": 11,
+      "weight_kg": 0.5,
+      "arm_m": 0.12,
+      "theoretical_nm": 0.5886,
+      "mean_current_mA": -68.61666666666666,
+      "std_current_mA": 4.18476071265995,
+      "torque_constant": -8.578090842846734
+    },
+    {
+      "trial": 12,
+      "weight_kg": 0.5,
+      "arm_m": 0.12,
+      "theoretical_nm": 0.5886,
+      "mean_current_mA": -68.42777777777776,
+      "std_current_mA": 3.868901014723483,
+      "torque_constant": -8.601769911504427
+    },
+    {
+      "trial": 13,
+      "weight_kg": 0.5,
+      "arm_m": 0.12,
+      "theoretical_nm": 0.5886,
+      "mean_current_mA": -69.26666666666665,
+      "std_current_mA": 4.6574611586619215,
+      "torque_constant": -8.497593840230993
+    },
+    {
+      "trial": 14,
+      "weight_kg": 1.0,
+      "arm_m": 0.12,
+      "theoretical_nm": 1.1772,
+      "mean_current_mA": -106.86666666666663,
+      "std_current_mA": 3.7822318514043767,
+      "torque_constant": -11.01559575795384
+    },
+    {
+      "trial": 15,
+      "weight_kg": 1.0,
+      "arm_m": 0.12,
+      "theoretical_nm": 1.1772,
+      "mean_current_mA": -108.58888888888885,
+      "std_current_mA": 3.926213738576602,
+      "torque_constant": -10.84088816126062
+    },
+    {
+      "trial": 16,
+      "weight_kg": 1.0,
+      "arm_m": 0.12,
+      "theoretical_nm": 1.1772,
+      "mean_current_mA": -109.3444444444444,
+      "std_current_mA": 4.243553571428108,
+      "torque_constant": -10.765979067167974
+    },
+    {
+      "trial": 17,
+      "weight_kg": 1.0,
+      "arm_m": 0.08,
+      "theoretical_nm": 0.7848,
+      "mean_current_mA": -75.04444444444444,
+      "std_current_mA": 10.194495912676619,
+      "torque_constant": -10.457802783535683
+    },
+    {
+      "trial": 18,
+      "weight_kg": 1.0,
+      "arm_m": 0.08,
+      "theoretical_nm": 0.7848,
+      "mean_current_mA": -75.66666666666666,
+      "std_current_mA": 4.204858301219357,
+      "torque_constant": -10.371806167400882
+    },
+    {
+      "trial": 19,
+      "weight_kg": 1.0,
+      "arm_m": 0.08,
+      "theoretical_nm": 0.7848,
+      "mean_current_mA": -75.1,
+      "std_current_mA": 4.273009608122957,
+      "torque_constant": -10.45006657789614
+    }
+  ],
+  "noise_floor_mA": 0.05,
+  "noise_std_mA": 0.7474029108259554,
+  "calibrated_constant_NmA": -10.29664437218573,
+  "calibrated_constant_std": 1.0598845727717299,
+  "note": "Trial 10 removed (outlier: std=34.66 mA, torque_constant=-30.07)"
+}

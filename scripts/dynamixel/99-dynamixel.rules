@@ -1,0 +1,9 @@
+# Automatically set FTDI latency timer to 1ms for U2D2 (and all FTDI serial devices)
+# This prevents 16ms USB buffering that limits Dynamixel read rate to ~31Hz.
+#
+# Install:
+#   sudo cp 99-dynamixel.rules /etc/udev/rules.d/
+#   sudo udevadm control --reload-rules
+#   (replug the U2D2 — no reboot needed)
+
+ACTION=="add", SUBSYSTEM=="usb-serial", DRIVER=="ftdi_sio", RUN+="/bin/sh -c 'echo 1 > /sys/bus/usb-serial/devices/%k/latency_timer'"
