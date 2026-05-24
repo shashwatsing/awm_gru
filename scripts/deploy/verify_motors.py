@@ -20,8 +20,8 @@ import time
 
 from dynamixel_sdk import COMM_SUCCESS, PacketHandler, PortHandler
 
-WHEEL_PORT = "/dev/ttyUSB0"
-LEG_PORT   = "/dev/ttyUSB1"
+WHEEL_PORT = "/dev/ttyUSB1"
+LEG_PORT   = "/dev/ttyUSB0"
 BAUDRATE   = 1_000_000
 PROTOCOL   = 2.0
 
@@ -37,8 +37,9 @@ ADDR_GOAL_POSITION   = 116   # legs
 ADDR_PRESENT_POSITION = 132
 
 # Leg tick constants
-LEG_CLOSED = {0: 1631, 1: 1631, 2: 3641, 3: 3641}  # keyed by ID
-LEG_OPEN   = {0: 3641, 1: 3641, 2: 1631, 3: 1631}  # small wiggle toward open
+# Calibrated 2026-05-24 — keyed by DXL ID
+LEG_CLOSED = {0: 2048, 1: 2033, 2: 1579, 3:  617}
+LEG_OPEN   = {0:    2, 1:    0, 2: 3612, 3: 2678}
 
 WHEEL_SPIN_LSB = 50   # ~0.5 rad/s — slow enough to see, safe
 LEG_WIGGLE_TICKS = 200  # small nudge toward open
