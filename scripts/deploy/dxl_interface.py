@@ -32,8 +32,8 @@ from dynamixel_sdk import (
 )
 
 # ── Ports ──────────────────────────────────────────────────────────────────────
-WHEEL_PORT = "/dev/ttyUSB0"   # RS-485, XM430-W210-R ×4
-LEG_PORT   = "/dev/ttyUSB1"   # TTL,    XM430-W350-T ×4
+WHEEL_PORT = "/dev/ttyUSB1"   # RS-485, XM430-W210-R ×4
+LEG_PORT   = "/dev/ttyUSB0"   # TTL,    XM430-W350-T ×4
 BAUDRATE   = 1_000_000
 PROTOCOL   = 2.0
 
@@ -71,19 +71,22 @@ CURRENT_UNIT    = 2.69e-3    # A/LSB
 TORQUE_CONSTANT = 3.83       # Nm/A  (calibrated 2026-04-19)
 TORQUE_NORM     = 2.70       # Nm — normalisation denominator
 
-# Leg tick↔extension mapping in sim obs order [F_L, F_R, B_L, B_R]
-# Left  legs (F_L=ID2, B_L=ID3): closed=3641, open=1631
-# Right legs (F_R=ID1, B_R=ID0): closed=1631, open=3641
+# Leg tick↔extension mapping — calibrated 2026-05-24 on physical robot
 #
 # sim obs idx:    0      1      2      3
 # joint:         F_L    F_R    B_L    B_R
 # DXL ID:         2      1      3      0
 # side:          Left  Right   Left  Right
-LEG_CLOSED_TICKS = np.array([3641, 1631, 3641, 1631], dtype=np.int32)
-LEG_OPEN_TICKS   = np.array([1631, 3641, 1631, 3641], dtype=np.int32)
-LEG_TICK_RANGE   = 2010   # ≈ π rad
-LEG_MIN_TICKS    = 1631
-LEG_MAX_TICKS    = 3641
+#
+# Left  legs (F_L, B_L): ticks INCREASE from closed→open
+# Right legs (F_R, B_R): ticks DECREASE from closed→open (open near 0)
+# Open ticks for right legs clamped to 5 (measured -28/-26, negative invalid for EEPROM)
+#
+LEG_CLOSED_TICKS = np.array([1579, 2033,  617, 2048], dtype=np.int32)
+LEG_OPEN_TICKS   = np.array([3612,    0, 2678,    2], dtype=np.int32)
+
+# Target sim angle at open position: left=-π, right=+π
+LEG_TARGET_ANGLE = np.array([-math.pi, math.pi, -math.pi, math.pi])
 
 
 def _to_signed16(raw: int) -> int:
@@ -105,11 +108,12 @@ def _rad_to_vel_lsb(rad_s: float) -> int:
 def _ticks_to_leg_rad(ticks: int, obs_idx: int) -> float:
     """Convert DXL ticks to sim joint angle (rad).
     obs_idx: position in sim obs array (0=F_L, 1=F_R, 2=B_L, 3=B_R).
+    Formula: ratio = (ticks - closed) / (open - closed), sim_rad = ratio * target_angle
     """
-    closed = LEG_CLOSED_TICKS[obs_idx]
-    open_  = LEG_OPEN_TICKS[obs_idx]
-    sign   = -1.0 if closed > open_ else 1.0   # left legs: closed=3641>open → negative
-    return sign * abs(ticks - closed) * math.pi / LEG_TICK_RANGE
+    closed = int(LEG_CLOSED_TICKS[obs_idx])
+    open_  = int(LEG_OPEN_TICKS[obs_idx])
+    ratio  = (ticks - closed) / (open_ - closed)
+    return ratio * LEG_TARGET_ANGLE[obs_idx]
 
 
 def _extension_to_ticks(extension: float, obs_idx: int) -> int:
@@ -120,7 +124,7 @@ def _extension_to_ticks(extension: float, obs_idx: int) -> int:
     closed = int(LEG_CLOSED_TICKS[obs_idx])
     open_  = int(LEG_OPEN_TICKS[obs_idx])
     ticks  = int(round(closed + ext * (open_ - closed)))
-    return int(np.clip(ticks, LEG_MIN_TICKS, LEG_MAX_TICKS))
+    return int(np.clip(ticks, min(closed, open_), max(closed, open_)))
 
 
 class DxlInterface:

@@ -26,7 +26,7 @@ import time
 
 from dynamixel_sdk import COMM_SUCCESS, PacketHandler, PortHandler
 
-LEG_PORT  = "/dev/ttyUSB1"
+LEG_PORT  = "/dev/ttyUSB0"
 BAUDRATE  = 1_000_000
 PROTOCOL  = 2.0
 
