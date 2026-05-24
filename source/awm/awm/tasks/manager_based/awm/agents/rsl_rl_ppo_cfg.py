@@ -21,7 +21,7 @@ class PPORunnerCfg(RslRlOnPolicyRunnerCfg):
     experiment_name = "awm_transformer"
     empirical_normalization = True
     logger = "wandb"
-    wandb_project = "awm_transformer"
+    wandb_project = "awm_gru"
     policy = RslRlPpoActorCriticCfg(
         init_noise_std=0.3,
         actor_obs_normalization=False,
@@ -50,7 +50,7 @@ class PPORunnerCfg(RslRlOnPolicyRunnerCfg):
 class PPOLSTMRunnerCfg(PPORunnerCfg):
     """LSTM-based recurrent policy — captures observation history implicitly."""
     experiment_name = "awm_lstm"
-    wandb_project = "awm_transformer"
+    wandb_project = "awm_gru"
     num_steps_per_env = 48
     policy = RslRlPpoActorCriticRecurrentCfg(
         init_noise_std=0.3,
@@ -83,49 +83,49 @@ class PPOLSTMRunnerCfg(PPORunnerCfg):
 class PPOWheelsOnlyRunnerCfg(PPORunnerCfg):
     """Ablation: wheels-only baseline."""
     experiment_name = "awm_wheels_only"
-    wandb_project = "awm_transformer"
+    wandb_project = "awm_gru"
 
 
 @configclass
 class PPOProprioOnlyRunnerCfg(PPORunnerCfg):
     """Ablation: proprioception-only (no terrain scan, no torques)."""
     experiment_name = "awm_mlp_proprio_only"
-    wandb_project = "awm_transformer"
+    wandb_project = "awm_gru"
 
 
 @configclass
 class PPOProprioTorqueRunnerCfg(PPORunnerCfg):
     """MLP: proprioception + leg torques — no terrain scan."""
     experiment_name = "awm_mlp_proprio_torque"
-    wandb_project = "awm_transformer"
+    wandb_project = "awm_gru"
 
 
 @configclass
 class PPOLegsOpenRunnerCfg(PPORunnerCfg):
     """Ablation: legs-fully-open baseline."""
     experiment_name = "awm_legs_open"
-    wandb_project = "awm_transformer"
+    wandb_project = "awm_gru"
 
 
 @configclass
 class PPOLSTMProprioOnlyRunnerCfg(PPOLSTMRunnerCfg):
     """LSTM ablation: proprioception-only (no terrain scan)."""
     experiment_name = "awm_lstm_proprio_only"
-    wandb_project = "awm_transformer"
+    wandb_project = "awm_gru"
 
 
 @configclass
 class PPOLSTMProprioTorqueRunnerCfg(PPOLSTMRunnerCfg):
     """LSTM: proprioception + leg torques — active morphological probing."""
     experiment_name = "awm_lstm_proprio_torque"
-    wandb_project = "awm_transformer"
+    wandb_project = "awm_gru"
 
 
 @configclass
 class PPOGRURunnerCfg(PPORunnerCfg):
     """GRU-based recurrent policy."""
     experiment_name = "awm_gru"
-    wandb_project = "awm_transformer"
+    wandb_project = "awm_gru"
     num_steps_per_env = 48
     policy = RslRlPpoActorCriticRecurrentCfg(
         init_noise_std=0.3,
@@ -158,35 +158,35 @@ class PPOGRURunnerCfg(PPORunnerCfg):
 class PPOGRUScanRunnerCfg(PPOGRURunnerCfg):
     """GRU baseline: full observations with terrain_scan (camera condition)."""
     experiment_name = "awm_gru_scan"
-    wandb_project = "awm_transformer"
+    wandb_project = "awm_gru"
 
 
 @configclass
 class PPOGRUProprioOnlyRunnerCfg(PPOGRURunnerCfg):
     """GRU ablation: proprioception-only (no terrain scan, no torques)."""
     experiment_name = "awm_gru_proprio_only"
-    wandb_project = "awm_transformer"
+    wandb_project = "awm_gru"
 
 
 @configclass
 class PPOGRUProprioTorqueRunnerCfg(PPOGRURunnerCfg):
     """GRU: proprioception + leg torques — active morphological probing (ours)."""
     experiment_name = "awm_gru_proprio_torque"
-    wandb_project = "awm_transformer"
+    wandb_project = "awm_gru"
 
 
 @configclass
 class PPOLSTMWheelsOnlyRunnerCfg(PPOLSTMRunnerCfg):
     """LSTM ablation: wheels-only."""
     experiment_name = "awm_lstm_wheels_only"
-    wandb_project = "awm_transformer"
+    wandb_project = "awm_gru"
 
 
 @configclass
 class PPOLSTMLegsOpenRunnerCfg(PPOLSTMRunnerCfg):
     """LSTM ablation: legs-open."""
     experiment_name = "awm_lstm_legs_open"
-    wandb_project = "awm_transformer"
+    wandb_project = "awm_gru"
 
 
 @configclass
