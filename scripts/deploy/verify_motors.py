@@ -28,7 +28,7 @@ PROTOCOL   = 2.0
 WHEEL_IDS = [0, 1, 2, 3]
 LEG_IDS   = [0, 1, 2, 3]
 
-WHEEL_LABELS = {0: "B_R", 1: "F_R", 2: "F_L", 3: "B_L"}
+WHEEL_LABELS = {0: "B_R", 1: "B_L", 2: "F_L", 3: "F_R"}
 LEG_LABELS   = {0: "B_R", 1: "F_R", 2: "F_L", 3: "B_L"}
 
 ADDR_TORQUE_ENABLE   = 64

@@ -5,11 +5,11 @@ Two buses:
   WHEEL_PORT (RS-485): 4× XM430-W210-R — velocity control
   LEG_PORT   (TTL):    4× XM430-W350-T — current-based position control (mode 5)
 
-Motor ID assignment:
+Motor ID assignment (verified 2026-05-24):
   ID 0 = wheel_B_R / leg_B_R   (Back Right)
-  ID 1 = wheel_F_R / leg_F_R   (Front Right)
+  ID 1 = wheel_B_L / leg_F_R   (wheel: Back Left,  leg: Front Right)
   ID 2 = wheel_F_L / leg_F_L   (Front Left)
-  ID 3 = wheel_B_L / leg_B_L   (Back Left)
+  ID 3 = wheel_F_R / leg_B_L   (wheel: Front Right, leg: Back Left)
 
 Sim obs ordering (arrays throughout this file are in this order):
   Wheels: [F_L, F_R, B_R, B_L]  → IDs [2, 1, 0, 3]
@@ -39,7 +39,7 @@ PROTOCOL   = 2.0
 
 # ── Motor IDs in sim obs order ────────────────────────────────────────────────
 # Wheels sim obs order: [F_L, F_R, B_R, B_L]
-WHEEL_IDS = [2, 1, 0, 3]
+WHEEL_IDS = [2, 3, 0, 1]
 # Legs sim obs order:   [F_L, F_R, B_L, B_R]
 LEG_IDS   = [2, 1, 3, 0]
 
