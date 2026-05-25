@@ -93,6 +93,37 @@ def main():
     if args.max_wheel_speed < 8.0:
         print(f"[SAFETY] Wheel speed capped at {args.max_wheel_speed:.1f} rad/s")
 
+    # ── GRU warm-up: run inference for 2 s without sending motor commands ─────
+    # Lets the GRU hidden state converge from real observations before motors engage.
+    # Also triggers JIT compile on the first call so the main loop starts clean.
+    WARMUP_STEPS = 120  # 2 seconds at 60 Hz
+    print(f"Warming up GRU ({WARMUP_STEPS} steps, motors hold position)...")
+    for _ in range(WARMUP_STEPS):
+        t0 = time.monotonic()
+        wheel_vel, leg_pos, leg_torque = dxl.read_all()
+        grav, ang_vel_z, acc_world_x = imu.read()
+        root_x = integrate_odometry(root_x, wheel_vel, DT)
+        obs = obs_builder.build(
+            cmd_vel=np.zeros(2, dtype=np.float32),
+            wheel_vel_signed=wheel_vel,
+            leg_pos_rad=leg_pos,
+            leg_torque_norm=leg_torque,
+            projected_grav=grav,
+            ang_vel_z=ang_vel_z,
+            root_x=root_x,
+            acc_world_x=acc_world_x,
+            dt=DT,
+        )
+        with torch.no_grad():
+            obs_t = torch.from_numpy(obs).unsqueeze(0).to(device)
+            policy(obs_t)
+        elapsed = time.monotonic() - t0
+        if elapsed < DT:
+            time.sleep(DT - elapsed)
+    obs_builder.reset()
+    root_x = 0.0
+    print("GRU warmed up. Starting control loop.")
+
     print(f"\nStarting 60 Hz loop — Ctrl-C to stop")
     print(f"cmd_vel = [{args.cmd_vx:.2f} m/s, {args.cmd_wz:.2f} rad/s]")
 
