@@ -350,7 +350,7 @@ class RewardsCfg:
     )
     rough_terrain_leg_bonus = RewTerm(
         func=mdp.rough_terrain_leg_bonus,
-        weight=0.8,
+        weight=2.0,
         params={
             "asset_cfg": SceneEntityCfg(
                 "robot",
@@ -365,7 +365,7 @@ class RewardsCfg:
     # directly learns: torque drops → retract legs.
     torque_gated_retraction = RewTerm(
         func=mdp.torque_gated_retraction,
-        weight=-2.5,
+        weight=-2.0,
         params={
             "asset_cfg": SceneEntityCfg(
                 "robot",
@@ -380,7 +380,7 @@ class RewardsCfg:
     # Forces proactive leg extension before/during obstacles; scan-based so no feedback loops.
     stuck_with_retracted_legs = RewTerm(
         func=mdp.stuck_with_retracted_legs,
-        weight=-0.6,
+        weight=-1.5,
         params={
             "command_name": "vel_cmd",
             "asset_cfg": SceneEntityCfg(
@@ -395,7 +395,7 @@ class RewardsCfg:
     # tilt_threshold=1.0 → full penalty at ~5.8° tilt. Sim2real: IMU + joint encoders.
     body_tilt_with_retracted_legs = RewTerm(
         func=mdp.body_tilt_with_retracted_legs,
-        weight=-0.8,
+        weight=-1.5,
         params={
             "asset_cfg": SceneEntityCfg(
                 "robot",

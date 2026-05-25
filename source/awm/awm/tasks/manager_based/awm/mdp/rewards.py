@@ -83,14 +83,29 @@ def action_l2(env: ManagerBasedRLEnv) -> torch.Tensor:
     return torch.mean(torch.square(env.action_manager.action), dim=1)
 
 
-def _leg_extension_mean(env: ManagerBasedRLEnv, asset_cfg: SceneEntityCfg) -> torch.Tensor:
-    """Helper: mean leg extension normalised to [0, 1] across all 4 legs."""
+def _leg_extension(env: ManagerBasedRLEnv, asset_cfg: SceneEntityCfg) -> torch.Tensor:
+    """Extension per leg, normalised to [0, 1].
+
+    All legs close at joint_pos=0. Left legs open toward -π (lower limit);
+    right legs open toward +π (upper limit). Using (pos - lower)/(upper - lower)
+    gives 1.0 for closed left legs and 0.0 for closed right legs — constant
+    regardless of actual extension, providing zero gradient.
+
+    Correct formula: |joint_pos| / half_range, where half_range = max(|lower|, |upper|).
+    This is 0 when closed (joint_pos=0) and 1 when fully open (joint_pos=±π) for all legs.
+    Scale-invariant: works for any robot size with the same hinge mechanism.
+    """
     asset: Articulation = env.scene[asset_cfg.name]
     limits = asset.data.soft_joint_pos_limits[:, asset_cfg.joint_ids]  # (N, L, 2)
     lower, upper = limits[..., 0], limits[..., 1]
+    half_range = torch.maximum(torch.abs(lower), torch.abs(upper))  # π for all legs
     leg_pos = asset.data.joint_pos[:, asset_cfg.joint_ids]
-    extension = torch.clamp((leg_pos - lower) / (upper - lower + 1e-6), 0.0, 1.0)
-    return torch.mean(extension, dim=1)
+    return torch.clamp(torch.abs(leg_pos) / (half_range + 1e-6), 0.0, 1.0)
+
+
+def _leg_extension_mean(env: ManagerBasedRLEnv, asset_cfg: SceneEntityCfg) -> torch.Tensor:
+    """Helper: mean leg extension normalised to [0, 1] across all 4 legs."""
+    return torch.mean(_leg_extension(env, asset_cfg), dim=1)
 
 
 def _leg_extension_max(env: ManagerBasedRLEnv, asset_cfg: SceneEntityCfg) -> torch.Tensor:
@@ -99,12 +114,7 @@ def _leg_extension_max(env: ManagerBasedRLEnv, asset_cfg: SceneEntityCfg) -> tor
     Unlike mean, max cannot be gamed by extending a single leg partially —
     any one leg sticking out gets the full penalty proportional to its extension.
     """
-    asset: Articulation = env.scene[asset_cfg.name]
-    limits = asset.data.soft_joint_pos_limits[:, asset_cfg.joint_ids]  # (N, L, 2)
-    lower, upper = limits[..., 0], limits[..., 1]
-    leg_pos = asset.data.joint_pos[:, asset_cfg.joint_ids]
-    extension = torch.clamp((leg_pos - lower) / (upper - lower + 1e-6), 0.0, 1.0)
-    return torch.amax(extension, dim=1)
+    return torch.amax(_leg_extension(env, asset_cfg), dim=1)
 
 
 # # _locomotion_difficulty_from_state — superseded by _terrain_difficulty_from_scan
