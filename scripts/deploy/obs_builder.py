@@ -19,7 +19,7 @@ no manual normalisation needed here.
 import numpy as np
 
 WHEEL_RADIUS   = 0.0508        # m
-WHEEL_SIGN     = np.array([1.0, -1.0, -1.0, 1.0])  # [F_L, F_R, B_R, B_L]
+WHEEL_SIGN     = np.array([-1.0, 1.0, 1.0, -1.0])  # [F_L, F_R, B_R, B_L] — negated from sim assumption
 EMA_ALPHA      = 0.1
 PROGRESS_MAX   = 0.5           # matches clamp in sim
 OBS_DIM        = 25

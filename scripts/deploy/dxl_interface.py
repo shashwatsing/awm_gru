@@ -67,7 +67,8 @@ WHEEL_READ_LEN   = 4
 WHEEL_VEL_UNIT = 0.229 * 2 * math.pi / 60   # LSB → rad/s  (0.229 RPM/LSB)
 
 # Sign mask in sim obs order [F_L, F_R, B_R, B_L]
-WHEEL_VEL_SIGN = np.array([1.0, -1.0, -1.0, 1.0])
+# Negated from initial assumption — physical motors run backward vs expected convention.
+WHEEL_VEL_SIGN = np.array([-1.0, 1.0, 1.0, -1.0])
 
 CURRENT_UNIT    = 2.69e-3    # A/LSB
 TORQUE_CONSTANT = 3.83       # Nm/A  (calibrated 2026-04-19)

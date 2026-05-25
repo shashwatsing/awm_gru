@@ -28,8 +28,8 @@ from obs_builder import ObsBuilder
 HZ = 60
 DT = 1.0 / HZ
 
-# Sign mask for wheel velocity obs (undone inside DxlInterface — applied here for clarity)
-WHEEL_SIGN = np.array([1.0, -1.0, -1.0, 1.0])
+# Sign mask for wheel velocity obs (must match dxl_interface.py WHEEL_VEL_SIGN)
+WHEEL_SIGN = np.array([-1.0, 1.0, 1.0, -1.0])
 
 
 def decode_actions(
