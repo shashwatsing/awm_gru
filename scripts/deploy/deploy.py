@@ -106,7 +106,7 @@ def main():
             # 1. Read sensors
             wheel_vel = dxl.read_wheel_velocities()          # (4,) rad/s, sign applied
             leg_pos, leg_torque = dxl.read_leg_state()       # (4,) each
-            grav, ang_vel_z = imu.read()
+            grav, ang_vel_z, acc_world_x = imu.read()
 
             # 2. Integrate odometry
             root_x = integrate_odometry(root_x, wheel_vel, DT)
@@ -120,6 +120,7 @@ def main():
                 projected_grav   = grav,
                 ang_vel_z        = ang_vel_z,
                 root_x           = root_x,
+                acc_world_x      = acc_world_x,
                 dt               = DT,
             )
 

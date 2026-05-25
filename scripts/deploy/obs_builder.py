@@ -24,6 +24,15 @@ EMA_ALPHA      = 0.1
 PROGRESS_MAX   = 0.5           # matches clamp in sim
 OBS_DIM        = 25
 
+# Complementary filter for slip estimation.
+# In sim, slip = mean_wheel_speed - |root_lin_vel_b| (wheel odometry vs ground truth).
+# On real robot there is no ground truth velocity — wheel odometry cannot detect its
+# own slip. Fix: integrate IMU world-frame forward acceleration (independent of wheels)
+# as a short-term velocity reference, corrected back toward wheel odometry over ~3 s
+# to prevent drift. Slip = max(wheel_speed - v_imu, 0).
+# Time constant: 1 / (COMP_WHEEL_ALPHA * 60 Hz) ≈ 3.3 s
+COMP_WHEEL_ALPHA = 0.005   # low-pass weight of wheel odometry correction
+
 
 class ObsBuilder:
     def __init__(self):
@@ -32,6 +41,7 @@ class ObsBuilder:
         self.slip_ema         = 0.0
         self.prev_root_x      = None   # initialised on first call
         self._initialized     = False
+        self._v_imu_x         = 0.0   # complementary filter velocity estimate
 
     def reset(self) -> None:
         """Call when starting a new run (or after robot falls/resets)."""
@@ -40,6 +50,7 @@ class ObsBuilder:
         self.slip_ema   = 0.0
         self.prev_root_x = None
         self._initialized = False
+        self._v_imu_x    = 0.0
 
     def build(
         self,
@@ -50,23 +61,30 @@ class ObsBuilder:
         projected_grav:   np.ndarray,   # (3,)
         ang_vel_z:        float,
         root_x:           float,        # integrated x position (from wheel odometry)
+        acc_world_x:      float = 0.0,  # forward acceleration in world frame (m/s²) from IMU
         dt:               float = 1/60,
     ) -> np.ndarray:
         """Returns float32 array of shape (25,)."""
 
         # ── base_lin_vel_x from wheel odometry ───────────────────────────────
-        # Use raw wheel speeds (before sign mask) to get magnitude
         raw_wheel_speeds = wheel_vel_signed / WHEEL_SIGN   # undo sign mask
         base_vx = float(np.mean(np.abs(raw_wheel_speeds)) * WHEEL_RADIUS)
 
-        # ── progress & slip EMA (matches sim exactly) ─────────────────────────
+        # ── progress & slip EMA ───────────────────────────────────────────────
         if not self._initialized:
             self.prev_root_x = root_x
+            self._v_imu_x    = base_vx
             self._initialized = True
 
         step_progress = float(np.clip(root_x - self.prev_root_x, 0.0, PROGRESS_MAX))
-        mean_wheel_speed = float(np.mean(np.abs(raw_wheel_speeds)) * WHEEL_RADIUS)
-        slip = float(max(mean_wheel_speed - abs(base_vx), 0.0))
+
+        # Complementary filter: integrate IMU forward acceleration for an independent
+        # velocity estimate, then correct slowly toward wheel odometry to prevent drift.
+        # slip = max(wheel_speed - v_imu, 0): positive when wheels spin faster than robot moves.
+        self._v_imu_x = ((1.0 - COMP_WHEEL_ALPHA) * (self._v_imu_x + acc_world_x * dt)
+                         + COMP_WHEEL_ALPHA * base_vx)
+        mean_wheel_speed = base_vx
+        slip = float(max(mean_wheel_speed - abs(self._v_imu_x), 0.0))
 
         self.prog_ema = (1.0 - EMA_ALPHA) * self.prog_ema + EMA_ALPHA * step_progress
         self.slip_ema = (1.0 - EMA_ALPHA) * self.slip_ema + EMA_ALPHA * slip

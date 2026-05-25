@@ -400,6 +400,61 @@ cat /etc/udev/rules.d/99-dynamixel.rules
 
 ---
 
+## Known Sim-to-Real Gaps
+
+### 1. `slip` obs — FIXED via IMU complementary filter
+
+**Problem:** In sim, `slip = mean_wheel_speed − |root_lin_vel_b|` uses ground-truth physics
+velocity as the reference. On the real robot, both terms came from the same wheel
+odometry — making `slip ≈ 0` always regardless of actual wheel slipping.
+
+**Root cause:** No independent velocity reference without ZED VIO (which we avoid
+to keep the ProprioTorque pipeline camera-free).
+
+**Fix implemented:** `imu_reader.py` now computes `acc_world_x` — the forward
+component of IMU acceleration rotated into world frame (using the Madgwick quaternion).
+`obs_builder.py` integrates this into `v_imu_x` via a complementary filter:
+
+```
+v_imu_x = 0.995 × (v_imu_x + acc_world_x × dt) + 0.005 × v_wheel
+slip    = max(v_wheel − v_imu_x, 0)
+```
+
+- Time constant ≈ 3.3 s at 60 Hz — prevents long-term drift
+- Short transients (wheel slipping on a stair edge) visible for ~1–3 s
+- On flat ground with no slip: `v_imu_x ≈ v_wheel` → `slip ≈ 0` ✓
+
+**Residual limitation:** IMU accelerometer noise (~0.05 m/s²) creates a small
+fluctuating slip estimate even when not slipping. The EMA (α=0.1) in obs_builder
+smooths this out; expect slip_ema < 0.02 on flat ground.
+
+---
+
+### 2. `base_lin_vel_x` — wheel odometry vs ground truth
+
+In sim: `root_lin_vel_b` (physics engine ground truth).
+On real robot: `mean(|wheel_omega|) × r_wheel` — overestimates vx when slipping.
+
+No clean fix without ZED VIO. The overestimate during slip may actually be a useful
+signal: LSTM sees `vx_high + prog_low + slip_high` simultaneously → coherent "slipping" state.
+Monitor in early real runs. If it causes instability, add IMU-fused Kalman estimate.
+
+---
+
+### 3. ZED Mini IMU axis convention — VERIFY BEFORE FIRST RUN
+
+The ZED Mini IMU axes may not align with the NWU convention expected by the Madgwick
+filter. Run `python imu_reader.py` with robot flat on table and confirm:
+
+```
+proj_grav_z ≈ -1.0,  proj_grav_x ≈ 0.0,  proj_grav_y ≈ 0.0
+```
+
+If axes are wrong, remap `gyr` and `acc` components in `imu_reader.py` before the
+`update_no_magnetometer` call.
+
+---
+
 ## First Run Protocol
 
 1. Robot on table, wheels not touching ground
