@@ -103,9 +103,8 @@ def main():
         while True:
             t0 = time.monotonic()
 
-            # 1. Read sensors
-            wheel_vel = dxl.read_wheel_velocities()          # (4,) rad/s, sign applied
-            leg_pos, leg_torque = dxl.read_leg_state()       # (4,) each
+            # 1. Read sensors (wheel + leg in parallel, then IMU)
+            wheel_vel, leg_pos, leg_torque = dxl.read_all()
             grav, ang_vel_z, acc_world_x = imu.read()
 
             # 2. Integrate odometry

@@ -21,6 +21,7 @@ Run standalone to scan and verify IDs before first policy run:
 
 import math
 import struct
+import threading
 
 import numpy as np
 from dynamixel_sdk import (
@@ -181,43 +182,76 @@ class DxlInterface:
 
     # ── Read ──────────────────────────────────────────────────────────────────
 
+    def read_all(self) -> tuple[np.ndarray, np.ndarray, np.ndarray]:
+        """Read wheels and legs in parallel (separate USB buses → true parallelism).
+        Returns (wheel_vel_signed, leg_positions_rad, leg_torques_norm)."""
+        wheel_result = [None]
+        leg_result   = [None]
+
+        def _read_wheels():
+            r = self._wheel_sr.txRxPacket()
+            if r != COMM_SUCCESS:
+                print(f"[WARN] wheel sync read failed: {self._pkt.getTxRxResult(r)}")
+                wheel_result[0] = np.zeros(4)
+                return
+            vels = np.zeros(4)
+            for i, id_ in enumerate(WHEEL_IDS):
+                raw     = self._wheel_sr.getData(id_, WHEEL_READ_START, WHEEL_READ_LEN)
+                vels[i] = _vel_lsb_to_rad(raw)
+            wheel_result[0] = vels * WHEEL_VEL_SIGN
+
+        def _read_legs():
+            r = self._leg_sr.txRxPacket()
+            if r != COMM_SUCCESS:
+                print(f"[WARN] leg sync read failed: {self._pkt.getTxRxResult(r)}")
+                leg_result[0] = (np.zeros(4), np.zeros(4))
+                return
+            positions = np.zeros(4)
+            torques   = np.zeros(4)
+            for i, id_ in enumerate(LEG_IDS):
+                cur_raw    = self._leg_sr.getData(id_, LEG_READ_START + LEG_CUR_OFFSET, 2)
+                cur_signed = _to_signed16(cur_raw)
+                torque_nm  = cur_signed * CURRENT_UNIT * TORQUE_CONSTANT
+                torques[i] = float(np.clip(torque_nm / TORQUE_NORM, -2.0, 2.0))
+                pos_raw      = self._leg_sr.getData(id_, LEG_READ_START + LEG_POS_OFFSET, 4)
+                positions[i] = _ticks_to_leg_rad(_to_signed32(pos_raw), i)
+            leg_result[0] = (positions, torques)
+
+        t1 = threading.Thread(target=_read_wheels)
+        t2 = threading.Thread(target=_read_legs)
+        t1.start(); t2.start()
+        t1.join();  t2.join()
+
+        leg_pos, leg_tor = leg_result[0]
+        return wheel_result[0], leg_pos, leg_tor
+
     def read_wheel_velocities(self) -> np.ndarray:
-        """Returns wheel velocities in sim obs order [F_L, F_R, B_R, B_L]
-        in rad/s with obs sign mask applied."""
+        """Single-port read — use read_all() for 60 Hz loop."""
         result = self._wheel_sr.txRxPacket()
         if result != COMM_SUCCESS:
             print(f"[WARN] wheel sync read failed: {self._pkt.getTxRxResult(result)}")
             return np.zeros(4)
-
         vels = np.zeros(4)
         for i, id_ in enumerate(WHEEL_IDS):
             raw     = self._wheel_sr.getData(id_, WHEEL_READ_START, WHEEL_READ_LEN)
             vels[i] = _vel_lsb_to_rad(raw)
-
         return vels * WHEEL_VEL_SIGN
 
     def read_leg_state(self) -> tuple[np.ndarray, np.ndarray]:
-        """Returns (leg_positions_rad, leg_torques_norm) in sim obs order
-        [F_L, F_R, B_L, B_R]."""
+        """Single-port read — use read_all() for 60 Hz loop."""
         result = self._leg_sr.txRxPacket()
         if result != COMM_SUCCESS:
             print(f"[WARN] leg sync read failed: {self._pkt.getTxRxResult(result)}")
             return np.zeros(4), np.zeros(4)
-
         positions = np.zeros(4)
         torques   = np.zeros(4)
         for i, id_ in enumerate(LEG_IDS):
-            # Current (2 bytes at offset 0)
             cur_raw    = self._leg_sr.getData(id_, LEG_READ_START + LEG_CUR_OFFSET, 2)
             cur_signed = _to_signed16(cur_raw)
             torque_nm  = cur_signed * CURRENT_UNIT * TORQUE_CONSTANT
             torques[i] = float(np.clip(torque_nm / TORQUE_NORM, -2.0, 2.0))
-
-            # Position (4 bytes at offset 6)
             pos_raw      = self._leg_sr.getData(id_, LEG_READ_START + LEG_POS_OFFSET, 4)
-            ticks        = _to_signed32(pos_raw)
-            positions[i] = _ticks_to_leg_rad(ticks, i)
-
+            positions[i] = _ticks_to_leg_rad(_to_signed32(pos_raw), i)
         return positions, torques
 
     # ── Write ─────────────────────────────────────────────────────────────────
