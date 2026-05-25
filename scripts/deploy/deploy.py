@@ -146,6 +146,8 @@ def main():
                 print(
                     f"[{loop_count:6d}] "
                     f"vx={vx_est:.3f} "
+                    f"whl_cmd=[{wheel_cmds[0]:+.2f},{wheel_cmds[1]:+.2f},"
+                    f"{wheel_cmds[2]:+.2f},{wheel_cmds[3]:+.2f}] "
                     f"grav=[{grav[0]:+.2f},{grav[1]:+.2f},{grav[2]:+.2f}] "
                     f"leg_ext=[{leg_ext[0]:.2f},{leg_ext[1]:.2f},"
                     f"{leg_ext[2]:.2f},{leg_ext[3]:.2f}] "
