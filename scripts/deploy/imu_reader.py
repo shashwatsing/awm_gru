@@ -69,8 +69,8 @@ class ImuReader:
             gyr = imu.get_angular_velocity()
             acc = imu.get_linear_acceleration()
             self._ahrs.update_no_magnetometer(
-                np.array([gyr.x, gyr.y, gyr.z]),
-                np.array([acc.x, acc.y, acc.z]),
+                np.array([float(gyr[0]), float(gyr[1]), float(gyr[2])]),
+                np.array([float(acc[0]), float(acc[1]), float(acc[2])]),
                 self._dt,
             )
             time.sleep(self._dt)
@@ -87,13 +87,13 @@ class ImuReader:
         """
         self._zed.get_sensors_data(self._sensors_data, sl.TIME_REFERENCE.CURRENT)
         imu = self._sensors_data.get_imu_data()
-        gyr = imu.get_angular_velocity()    # deg/s
-        acc = imu.get_linear_acceleration() # m/s²
+        gyr = imu.get_angular_velocity()    # deg/s — list [x, y, z] in SDK 5.x
+        acc = imu.get_linear_acceleration() # m/s² — list [x, y, z] in SDK 5.x
 
-        ax, ay, az = float(acc.x), float(acc.y), float(acc.z)
+        ax, ay, az = float(acc[0]), float(acc[1]), float(acc[2])
 
         self._ahrs.update_no_magnetometer(
-            np.array([gyr.x, gyr.y, gyr.z]),
+            np.array([float(gyr[0]), float(gyr[1]), float(gyr[2])]),
             np.array([ax, ay, az]),
             self._dt,
         )
@@ -108,7 +108,7 @@ class ImuReader:
         gz = -(w*w - x*x - y*y + z*z)
         projected_gravity = np.array([gx, gy, gz], dtype=np.float32)
 
-        ang_vel_z = float(math.radians(gyr.z))  # deg/s → rad/s
+        ang_vel_z = float(math.radians(gyr[2]))  # deg/s → rad/s
 
         # Rotate body-frame acceleration into world frame, then remove gravity.
         # World x = forward direction. R(q) @ a_body gives world-frame acceleration.
