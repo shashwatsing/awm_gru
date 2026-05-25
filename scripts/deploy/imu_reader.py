@@ -30,6 +30,11 @@ except ImportError:
     raise ImportError("imufusion not found — run: pip install imufusion")
 
 
+# ZED Mini is mounted at this angle below horizontal.
+# Adjust if the physical mount changes.
+CAMERA_PITCH_DEG = 30.0
+
+
 class ImuReader:
     """
     Reads ZED Mini IMU at ~200 Hz internally, runs Madgwick AHRS filter,
@@ -60,6 +65,19 @@ class ImuReader:
         )
         self._dt = 1.0 / sample_rate
 
+        # Precompute axis remapping: ZED camera (RDF) → robot body (NWU) + undo mount pitch.
+        # ZED RDF: x=right, y=down, z=forward.
+        # Body NWU: x=forward, y=left, z=up.
+        # Camera is pitched CAMERA_PITCH_DEG below horizontal, so rotate +pitch around body Y.
+        # Combined (verified against raw acc): body = R @ zed_vec where:
+        #   body_x =  -sp*zed_y + cp*zed_z
+        #   body_y =  -zed_x
+        #   body_z =  -cp*zed_y - sp*zed_z
+        cp = math.cos(math.radians(CAMERA_PITCH_DEG))
+        sp = math.sin(math.radians(CAMERA_PITCH_DEG))
+        self._cp = cp
+        self._sp = sp
+
         # Warm up filter for ~0.5 s before returning valid readings
         print("Warming up IMU filter...")
         t0 = time.monotonic()
@@ -69,12 +87,21 @@ class ImuReader:
             gyr = imu.get_angular_velocity()
             acc = imu.get_linear_acceleration()
             self._ahrs.update_no_magnetometer(
-                np.array([float(gyr[0]), float(gyr[1]), float(gyr[2])]),
-                np.array([float(acc[0]), float(acc[1]), float(acc[2])]),
+                self._to_body(gyr),
+                self._to_body(acc),
                 self._dt,
             )
             time.sleep(self._dt)
         print("IMU ready.")
+
+    def _to_body(self, v) -> np.ndarray:
+        """Remap ZED camera frame (RDF) to robot body frame (NWU) with mount pitch."""
+        x, y, z = float(v[0]), float(v[1]), float(v[2])
+        return np.array([
+            -self._sp * y + self._cp * z,   # forward
+            -x,                              # left
+            -self._cp * y - self._sp * z,   # up
+        ], dtype=np.float64)
 
     def read(self) -> tuple[np.ndarray, float, float]:
         """
@@ -90,13 +117,10 @@ class ImuReader:
         gyr = imu.get_angular_velocity()    # deg/s — list [x, y, z] in SDK 5.x
         acc = imu.get_linear_acceleration() # m/s² — list [x, y, z] in SDK 5.x
 
-        ax, ay, az = float(acc[0]), float(acc[1]), float(acc[2])
+        gyr_body = self._to_body(gyr)
+        acc_body = self._to_body(acc)
 
-        self._ahrs.update_no_magnetometer(
-            np.array([float(gyr[0]), float(gyr[1]), float(gyr[2])]),
-            np.array([ax, ay, az]),
-            self._dt,
-        )
+        self._ahrs.update_no_magnetometer(gyr_body, acc_body, self._dt)
 
         # Quaternion (w, x, y, z) — body-to-world rotation
         q = self._ahrs.quaternion.wxyz
@@ -108,16 +132,14 @@ class ImuReader:
         gz = -(w*w - x*x - y*y + z*z)
         projected_gravity = np.array([gx, gy, gz], dtype=np.float32)
 
-        ang_vel_z = float(math.radians(gyr[2]))  # deg/s → rad/s
+        ang_vel_z = float(math.radians(gyr_body[2]))  # body-frame yaw rate, deg/s → rad/s
 
-        # Rotate body-frame acceleration into world frame, then remove gravity.
-        # World x = forward direction. R(q) @ a_body gives world-frame acceleration.
-        # Row 0 of rotation matrix from quaternion:
-        acc_world_x = (ax * (w*w + x*x - y*y - z*z)
-                       + ay * 2.0 * (x*y - w*z)
-                       + az * 2.0 * (x*z + w*y))
-        # Gravity in world frame is [0, 0, -9.81]; world-x component is 0 on flat
-        # ground and non-zero on slopes — no explicit removal needed for slip detection.
+        # Rotate body-frame acceleration into world frame (for slip estimation).
+        # Row 0 of rotation matrix from quaternion gives world-x (forward) component.
+        bx, by, bz = float(acc_body[0]), float(acc_body[1]), float(acc_body[2])
+        acc_world_x = (bx * (w*w + x*x - y*y - z*z)
+                       + by * 2.0 * (x*y - w*z)
+                       + bz * 2.0 * (x*z + w*y))
 
         return projected_gravity, ang_vel_z, acc_world_x
 
