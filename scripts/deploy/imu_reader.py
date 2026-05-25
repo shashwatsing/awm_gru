@@ -50,14 +50,14 @@ class ImuReader:
 
         # Madgwick AHRS — NWU convention matches Isaac Lab body frame
         self._ahrs = imufusion.Ahrs()
-        settings = imufusion.Settings()
-        settings.convention = imufusion.CONVENTION_NWU
-        settings.gain = 0.5
-        settings.gyroscope_range = 2000
-        settings.acceleration_rejection = 10.0
-        settings.magnetic_rejection = 10.0
-        settings.recovery_trigger_period = 5 * sample_rate
-        self._ahrs.settings = settings
+        self._ahrs.settings = imufusion.Settings(
+            imufusion.CONVENTION_NWU,  # 0
+            0.5,                       # gain
+            2000.0,                    # gyroscope_range deg/s
+            10.0,                      # acceleration_rejection
+            10.0,                      # magnetic_rejection
+            5 * sample_rate,           # recovery_trigger_period (unsigned int)
+        )
         self._dt = 1.0 / sample_rate
 
         # Warm up filter for ~0.5 s before returning valid readings
