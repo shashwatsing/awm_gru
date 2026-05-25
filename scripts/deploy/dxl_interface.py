@@ -44,6 +44,7 @@ WHEEL_IDS = [2, 3, 0, 1]
 LEG_IDS   = [2, 1, 3, 0]
 
 # ── Register addresses (XM430, Protocol 2.0) ──────────────────────────────────
+ADDR_OPERATING_MODE   = 11    # EEPROM — requires torque disabled to write
 ADDR_TORQUE_ENABLE    = 64
 ADDR_GOAL_VELOCITY    = 104   # 4B signed, wheels only
 ADDR_GOAL_POSITION    = 116   # 4B signed, legs only
@@ -139,6 +140,16 @@ class DxlInterface:
                 raise RuntimeError(f"Failed to open {name} port")
             if not ph.setBaudRate(BAUDRATE):
                 raise RuntimeError(f"Failed to set baud on {name} port")
+
+        # ── Set operating modes (EEPROM write — requires torque disabled) ────────
+        # Wheels: mode 1 = Velocity Control. Factory default is mode 3 (Position).
+        # Legs:   mode 5 = Current-based Position Control.
+        for id_ in WHEEL_IDS:
+            self._write1(self._wheel_ph, id_, ADDR_TORQUE_ENABLE, 0)
+            self._write1(self._wheel_ph, id_, ADDR_OPERATING_MODE, 1)
+        for id_ in LEG_IDS:
+            self._write1(self._leg_ph, id_, ADDR_TORQUE_ENABLE, 0)
+            self._write1(self._leg_ph, id_, ADDR_OPERATING_MODE, 5)
 
         # ── Enable torque ─────────────────────────────────────────────────────
         for id_ in WHEEL_IDS:
